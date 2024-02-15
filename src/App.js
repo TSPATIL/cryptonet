@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react'
+import ResultItem from './components/ResultItem';
+import '../src/App.css'
 
 function App() {
+  const [results, setResults] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('https://randomuser.me/api/?page=1&results=1&seed=abc');
+      const info = await response.json();
+      setResults(await info.results);
+    }
+    fetchData();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App flex bg-gradient-to-br from-[#3D550C] to-[#ECF87F] items-center justify-center overflow-hidden">
+      <div className="donut border-[20px] p-32 absolute top-[-128px] rounded-full right-[300px]"></div>
+      <div className="donut border-[20px] p-32 absolute bottom-[-880px] rounded-full left-[-90px]"></div>
+      <div>
+      <h1 className="text-5xl font-bold text-center text-[black] pt-10 underline">
+        ScoreCard
+      </h1>
+      <div className='rounded-3xl m-12 p-12'>
+        {results && results.map((result) => {
+          return <ResultItem result={result} />
+        })}
+      </div>
+      </div>
     </div>
   );
 }
